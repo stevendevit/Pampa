@@ -1,0 +1,21 @@
+{
+  "sentences": [
+    {
+      "identifier": "sentence_track",
+      "sentences": [
+        {
+          "identifier": "s_track_not_found",
+          "localised": "No he encontrado ninguna canción"
+        },
+        {
+          "identifier": "s_track_found_list",
+          "localised": "He encontrado %s [canción|canciones]"
+        },
+        {
+          "identifier": "s_track_enumerate",
+          "localised": "Número %d :"
+        }
+      ]
+    }
+  ]
+}

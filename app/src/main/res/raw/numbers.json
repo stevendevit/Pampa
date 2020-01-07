@@ -1,0 +1,53 @@
+{
+  "numbers": [
+    {
+      "identifier": "number_one",
+      "localised": "uno",
+      "value": 1
+    },
+    {
+      "identifier": "number_two",
+      "localised": "dos",
+      "value": 2
+    },
+    {
+      "identifier": "number_three",
+      "localised": "tres",
+      "value": 3
+    },
+    {
+      "identifier": "number_four",
+      "localised": "cuatro",
+      "value": 4
+    },
+    {
+      "identifier": "number_five",
+      "localised": "cinco",
+      "value": 5
+    },
+    {
+      "identifier": "number_six",
+      "localised": "seis",
+      "value": 6
+    },
+    {
+      "identifier": "number_seven",
+      "localised": "siete",
+      "value": 7
+    }, {
+      "identifier": "number_eight",
+      "localised": "ocho",
+      "value": 8
+    },
+    {
+      "identifier": "number_nine",
+      "localised": "nueve",
+      "value": 9
+    },
+    {
+      "identifier": "number_ten",
+      "localised": "diez",
+      "value": 10
+    }
+  ]
+}

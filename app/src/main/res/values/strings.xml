@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Pampa</string>
+    <string name="title_home">Music</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_album">Album</string>
+    <string name="title_settings">Settings</string>
+</resources>

@@ -1,0 +1,28 @@
+{
+  "commands": [
+    {
+      "command": "cmd_playback",
+      "localised": "reproducir",
+      "subCommands": []
+    },
+    {
+      "command": "cmd_track",
+      "localised": "pista",
+      "subCommands": [
+        {
+          "command": "sub_cmd_go_back",
+          "localised": "retroceder"
+        },
+        {
+          "command": "sub_cmd_go_forward",
+          "localised": "avanzar"
+        }
+      ]
+    },
+    {
+      "command": "cmd_volume",
+      "localised": "volumen",
+      "subCommands": []
+    }
+  ]
+}
