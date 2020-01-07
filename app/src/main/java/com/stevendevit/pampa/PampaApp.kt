@@ -2,19 +2,15 @@ package com.stevendevit.pampa
 
 import android.app.Application
 import com.google.gson.GsonBuilder
-import com.stevendevit.data.constants.PaperConstants
 import com.stevendevit.data.model.CommandJsonEntry
 import com.stevendevit.data.model.NumberJsonEntry
 import com.stevendevit.data.model.QuestionJsonEntry
 import com.stevendevit.data.model.SentenceJsonEntry
 import com.stevendevit.data.populate.CommandPopulateImpl
-import com.stevendevit.domain.model.CommandMapEntry
-import com.stevendevit.domain.model.NumberMapEntry
-import com.stevendevit.pampa.datasource.command.CommandTable
-import com.stevendevit.pampa.datasource.repository.CommandRepositoryImpl
 import com.stevendevit.pampa.module.KoinModules
 import io.paperdb.Paper
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 
 /**
  * Created by stevendevit on 05/01/2020.
@@ -26,23 +22,18 @@ class PampaApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Paper.init(this)
-
-        CommandTable(CommandRepositoryImpl())
-
-        populateData()
-
         startKoin()
+
+        // TODO do it only for the first time
+        populateData()
     }
 
     private fun startKoin() {
 
         org.koin.core.context.startKoin {
             androidContext(this@PampaApp)
-            modules(KoinModules.NumbersTableModule)
-            modules(KoinModules.CommandsTableModule)
-            modules(KoinModules.SpeechModule)
-            modules(KoinModules.QuestionModule)
-            modules(KoinModules.SentencesModule)
+            androidLogger()
+            modules(KoinModules.AllModules)
         }
     }
 
@@ -58,13 +49,15 @@ class PampaApp : Application() {
             it.readText()
         }
 
-        val questionsJsonResource= resources.openRawResource(R.raw.questions).bufferedReader().use {
-            it.readText()
-        }
+        val questionsJsonResource =
+            resources.openRawResource(R.raw.questions).bufferedReader().use {
+                it.readText()
+            }
 
-        val sentencesJsonResource= resources.openRawResource(R.raw.sentences).bufferedReader().use {
-            it.readText()
-        }
+        val sentencesJsonResource =
+            resources.openRawResource(R.raw.sentences).bufferedReader().use {
+                it.readText()
+            }
 
         val commandsJson =
             gsonBuilder.fromJson(commandsJsonResource, CommandJsonEntry::class.java)
@@ -86,12 +79,12 @@ class PampaApp : Application() {
             .mergeWith(dataPopulator.populateAllDefaultSentences(sentencesJson.sentences!!))
             .subscribe {
 
-              /*  val commands =
+             /*   val commands =
                     Paper.book().read<List<CommandMapEntry>>(PaperConstants.TABLE_COMMANDS)
-                val numbers =
-                    Paper.book().read<List<NumberMapEntry>>(PaperConstants.TABLE_NUMBERS)*/
+                val questionsn =
+                    Paper.book().read<List<QuestionJsonEntry>>(PaperConstants.TABLE_QUESTIONS)
 
-                println("Succeeded table dumps")
+                println("Succeeded tables dump")*/
             }
     }
 }

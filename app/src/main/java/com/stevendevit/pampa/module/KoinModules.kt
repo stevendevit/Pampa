@@ -27,28 +27,36 @@ import org.koin.dsl.module
 
 object KoinModules {
 
-    val NumbersTableModule = module {
+    private val NumbersTableModule = module {
         single { NumberTable(get()) }
         single<INumberRepository> { NumberRepositoryImpl() }
     }
 
-    val CommandsTableModule = module {
+    private val CommandsTableModule = module {
         single { CommandManager(get()) }
         single<ICommandTable> { CommandTable(get()) }
         single<ICommandRepository> { CommandRepositoryImpl() }
     }
 
-    val QuestionModule = module {
+    private val QuestionModule = module {
         single<IQuestionTable> { QuestionTable(get()) }
         single<IQuestionRepository> { QuestionRepositoryImpl() }
     }
 
-    val SentencesModule = module {
+    private val SentencesModule = module {
         single<ISentenceTable> { SentenceTable(get()) }
         single<ISentenceRepository> { SentenceRepositoryImpl() }
     }
 
-    val SpeechModule = module {
+    private val SpeechModule = module {
         single<ISpeech> { SpeechImpl() }
     }
+
+    val AllModules = listOf(
+        NumbersTableModule,
+        CommandsTableModule,
+        QuestionModule,
+        SentencesModule,
+        SpeechModule
+    )
 }
