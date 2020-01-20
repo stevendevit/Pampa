@@ -6,8 +6,12 @@ package com.stevendevit.domain.model
  */
 
 data class CommandMapEntry(
-   val identifier: String, val localisedIdentifier: String,
-    val subCommands: List<SubCommandMapEntry>
+    val identifier: String, val localisedIdentifier: String,
+    val subCommands: List<SubCommandMapEntry>,
+    val parameters : List<CommandParameterEntryValue>
 )
 
+data class CommandParameterEntryValue(
+    val identifier: String, val localised: String
+)
 

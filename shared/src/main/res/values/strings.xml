@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">PruebaBeMobile</string>
+    <string name="total_euros">Total: </string>
+    <string name="euro_sign">€</string>
+    <string name="amount">Amount: </string>
+    <string name="sku">Sku</string>
+</resources>

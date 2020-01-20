@@ -1,12 +1,9 @@
 package com.stevendevit.pampa
 
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import com.stevendevit.data.datasource.ext.getSingularOrPlural
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -17,8 +14,11 @@ import org.junit.Assert.*
 class ExampleInstrumentedTest {
     @Test
     fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.stevendevit.pampa", appContext.packageName)
+//        var str = "He encontrado %s|canción:canciones"
+//
+//        val str2 = str.getSingularOrPlural(1)
+//        val str23 = str.getSingularOrPlural(2)
+
+        println()
     }
 }

@@ -1,5 +1,6 @@
 package com.stevendevit.data.model
 
+import com.stevendevit.domain.model.CommandParameterEntryValue
 import com.stevendevit.domain.model.SubCommandMapEntry
 
 /**
@@ -9,5 +10,7 @@ import com.stevendevit.domain.model.SubCommandMapEntry
 data class CommandJsonValue(
     val command: String,
     val localised: String,
-    val subCommands : List<SubCommandMapEntry>
+    val subCommands : List<SubCommandMapEntry>,
+    val parameters : List<CommandParameterEntryValue>
 )
+

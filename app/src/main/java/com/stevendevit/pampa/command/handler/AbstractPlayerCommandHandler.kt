@@ -1,18 +1,14 @@
 package com.stevendevit.pampa.command.handler
 
-import com.stevendevit.data.interfaces.ICommandCycleDelegate
-import com.stevendevit.data.interfaces.IPlayerCommandHandler
+import com.stevendevit.domain.interfaces.ICommandCycleDelegate
+import com.stevendevit.domain.interfaces.IPlayerCommandHandler
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 /**
  * Created by stevendevit on 01/01/2020.
  * tankadeveloper@gmail.com
  */
-abstract class AbstractPlayerCommandHandler : IPlayerCommandHandler {
-
-    val compositeDisposable by lazy {
-        CompositeDisposable()
-    }
+ abstract class AbstractPlayerCommandHandler : IPlayerCommandHandler {
 
     var _cycleDelegate: ICommandCycleDelegate? = null
 
@@ -22,9 +18,8 @@ abstract class AbstractPlayerCommandHandler : IPlayerCommandHandler {
 
     override fun clear() {
 
-        if (!compositeDisposable.isDisposed) {
-            compositeDisposable.dispose()
-            compositeDisposable.clear()
-        }
+    }
+
+    override fun dispose() {
     }
 }

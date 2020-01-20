@@ -6,16 +6,10 @@ package com.stevendevit.data.constants
  */
 object CommandTableConstants {
 
-    const val COMMAND_ID_PLAYBACK = "cmd_playback"
-    const val COMMAND_ID_SEARCH_TRACK = "cmd_search_track"
-    const val COMMAND_ID_TRACK = "cmd_track"
-    const val COMMAND_ID_VOLUME = "cmd_volume"
-}
-
-object SubCommandTableConstants {
-
-    const val TRACK_SUB_COMMAND_GO_BACK = "sub_cmd_go_back"
-    const val TRACK_SUB_COMMAND_GO_FORWARD = "sub_cmd_go_forward"
+    const val COMMAND_ID_PLAYBACK = "COMMAND_ID_PLAYBACK"
+    const val COMMAND_ID_SEARCH_TRACK = "COMMAND_ID_SEARCH_TRACK"
+    const val COMMAND_ID_TRACK = "COMMAND_ID_TRACK"
+    const val COMMAND_ID_VOLUME = "COMMAND_ID_VOLUME"
 }
 
 const val CMD_NOT_RECOGNIZED = "CMD_NOT_RECOGNIZED"

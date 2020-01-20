@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
  */
 abstract class AbstractBehavior {
 
-    private val compositeDisposable by lazy {
+    protected val compositeDisposable by lazy {
         CompositeDisposable()
     }
 

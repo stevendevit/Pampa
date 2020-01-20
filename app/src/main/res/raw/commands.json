@@ -1,27 +1,41 @@
 {
   "commands": [
     {
-      "command": "cmd_playback",
+      "command": "COMMAND_ID_PLAYBACK",
       "localised": "reproducir",
-      "subCommands": []
+      "subCommands": [],
+      "parameters": []
     },
     {
-      "command": "cmd_track",
+      "command": "COMMAND_ID_TRACK",
       "localised": "pista",
       "subCommands": [
         {
-          "command": "sub_cmd_go_back",
+          "command": "SUB_CMD_TRACK_GO_BACK",
           "localised": "retroceder"
         },
         {
-          "command": "sub_cmd_go_forward",
+          "command": "SUB_CMD_TRACK_GO_FORWARD",
           "localised": "avanzar"
         }
-      ]
+      ],
+      "parameters": []
     },
     {
-      "command": "cmd_volume",
+      "command": "COMMAND_ID_VOLUME",
       "localised": "volumen",
+      "subCommands": [],
+      "parameters": []
+    },
+    {
+      "command": "COMMAND_ID_SEARCH_TRACK",
+      "localised": "buscar",
+      "parameters": [
+        {
+          "identifier": "SEARCH_TRACK_PARAM_IGNORE",
+          "localised": "ignorar"
+        }
+      ],
       "subCommands": []
     }
   ]

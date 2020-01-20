@@ -1,7 +1,10 @@
 package com.stevendevit.pampa.voice.speech
 
 import android.content.Context
-import com.stevendevit.pampa.model.SpeechResult
+import com.stevendevit.domain.interfaces.ISpeech
+import com.stevendevit.domain.interfaces.ISpeechListener
+import com.stevendevit.domain.interfaces.ITextToSpeechCallback
+import com.stevendevit.domain.model.SpeechResult
 import net.gotev.speech.Speech
 import net.gotev.speech.SpeechDelegate
 import net.gotev.speech.TextToSpeechCallback
@@ -24,6 +27,7 @@ class SpeechImpl : ISpeech {
     override fun say(string: String, listener: ITextToSpeechCallback) {
 
         stopSpeech()
+
         Speech.getInstance().say(
             string, object : TextToSpeechCallback {
                 override fun onError() {
@@ -42,7 +46,10 @@ class SpeechImpl : ISpeech {
     }
 
     override fun startListening(listener: ISpeechListener) {
+
         stopListening()
+        stopSpeech()
+
         Speech.getInstance().startListening(null, object : SpeechDelegate {
             override fun onStartOfSpeech() {
                 listener.onStartOfSpeech()
@@ -60,6 +67,11 @@ class SpeechImpl : ISpeech {
                 listener.onSpeechResult(SpeechResult.Data(result ?: ""))
             }
         })
+    }
+
+    override fun stopAll() {
+        stopListening()
+        stopSpeech()
     }
 
     override fun stopListening() {

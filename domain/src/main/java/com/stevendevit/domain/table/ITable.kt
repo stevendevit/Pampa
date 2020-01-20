@@ -6,5 +6,5 @@ package com.stevendevit.domain.table
  */
 abstract class ITable<K, V> {
 
-    abstract var table : HashMap<K, V>
+    abstract val table : HashMap<K, V>
 }

@@ -1,17 +1,20 @@
 package com.stevendevit.pampa.command.manager
 
-import com.stevendevit.data.interfaces.ICommandManagerDelegate
-import com.stevendevit.data.interfaces.ICommandCycleDelegate
-import com.stevendevit.data.interfaces.IPlayerCommandHandler
+import androidx.lifecycle.viewModelScope
+import com.stevendevit.domain.interfaces.ICommandCycleDelegate
+import com.stevendevit.domain.interfaces.ICommandManagerDelegate
+import com.stevendevit.domain.interfaces.IPlayerCommandHandler
 import com.stevendevit.domain.model.CommandMetaData
-import com.stevendevit.pampa.datasource.command.ICommandTable
+import com.stevendevit.domain.table.ICommandTable
+import com.stevendevit.shared.base.BaseViewModel
+import kotlinx.coroutines.launch
 import java.util.*
 
 /**
  * Created by stevendevit on 01/01/2020.
  * tankadeveloper@gmail.com
  */
-class CommandManager(private val commandTable: ICommandTable) {
+class CommandManager(private val commandTable: ICommandTable) : BaseViewModel() {
 
     private val commandQueue: ArrayDeque<CommandMetaData> = ArrayDeque()
 
@@ -36,7 +39,7 @@ class CommandManager(private val commandTable: ICommandTable) {
         return this
     }
 
-    fun perform(commandMetaData: CommandMetaData) {
+    fun perform(commandMetaData: CommandMetaData, now: Boolean = false) {
 
         if (!commandTable.isValidCommand(commandMetaData)) {
             commandManagerDelegate.onCommandNotRecognized(commandMetaData)
@@ -44,14 +47,20 @@ class CommandManager(private val commandTable: ICommandTable) {
         }
 
         this.commandQueue.add(commandMetaData)
-        dequeCommands()
+
+        if (now){
+            dequeCommands()
+        }
     }
 
     fun dequeCommands() {
 
         if (this.commandQueue.size >= 1) {
             val commandMeta = commandQueue.pop()
-            this.commandHandler.perform(commandMeta)
+
+            viewModelScope.launch {
+                this@CommandManager.commandHandler.perform(commandMeta)
+            }
         }
     }
 
@@ -62,11 +71,11 @@ class CommandManager(private val commandTable: ICommandTable) {
         }
     }
 
-    fun perform(raw: String) {
+    fun perform(raw: String, now: Boolean = false) {
         val parts = raw.split(" ")
 
         if (parts.size > 1) {
-            this.perform(constructCommand(parts))
+            this.perform(constructCommand(parts), now)
         } else {
             commandManagerDelegate.onParamsNotValid(constructCommand(parts))
         }

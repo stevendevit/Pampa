@@ -1,10 +1,10 @@
 {
   "questions": [
     {
-      "identifier": "question_track",
+      "identifier": "Q_TRACK",
       "questions": [
         {
-          "identifier": "q_track_what_track_to_listen",
+          "identifier": "Q_TRACK_WHICH_TRACK_TO_LISTEN",
           "localised": "¿Qué canción deseas escuchar?"
         }
       ]

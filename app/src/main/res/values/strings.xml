@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Pampa</string>
-    <string name="title_home">Music</string>
+    <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_album">Album</string>
     <string name="title_settings">Settings</string>
+    <string name="debug_search_by_title">" Buscar canción por título"</string>
 </resources>

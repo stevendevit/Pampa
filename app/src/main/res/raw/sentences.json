@@ -1,19 +1,22 @@
 {
   "sentences": [
     {
-      "identifier": "sentence_track",
+      "identifier": "SENTENCE_TRACK",
       "sentences": [
         {
-          "identifier": "s_track_not_found",
-          "localised": "No he encontrado ninguna canción"
+          "identifier": "S_TRACK_NOT_FOUND",
+          "localised": "No he encontrado ninguna canción",
+          "plural": false
         },
         {
-          "identifier": "s_track_found_list",
-          "localised": "He encontrado %s [canción|canciones]"
+          "identifier": "S_TRACK_FOUND_LIST",
+          "localised": "He encontrado %s|canción:canciones",
+          "plural": true
         },
         {
-          "identifier": "s_track_list_enumerate",
-          "localised": "Número %d :"
+          "identifier": "S_TRACK_LIST_ENUMERATE",
+          "localised": "Número %d :",
+          "plural": false
         }
       ]
     }

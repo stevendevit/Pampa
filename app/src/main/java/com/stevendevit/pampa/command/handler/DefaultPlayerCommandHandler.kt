@@ -1,10 +1,11 @@
 package com.stevendevit.pampa.command.handler
 
 import android.content.Context
-import com.stevendevit.data.commands.AbstractCommand
+import com.stevendevit.domain.commands.AbstractCommand
 import com.stevendevit.domain.model.CommandMetaData
-import com.stevendevit.pampa.datasource.command.CommandFactory
-import com.stevendevit.pampa.datasource.command.ICommandTable
+import com.stevendevit.pampa.command.CommandFactory
+import com.stevendevit.domain.table.ICommandTable
+import com.stevendevit.shared.data.Either
 
 /**
  * Created by stevendevit on 01/01/2020.
@@ -14,28 +15,19 @@ class DefaultPlayerCommandHandler(
     private val context: Context, private val commandTable: ICommandTable
 ) : AbstractPlayerCommandHandler() {
 
-    override fun perform(commandMetaData: CommandMetaData) {
+    override suspend fun perform(commandMetaData: CommandMetaData) {
 
         val command: AbstractCommand<*> = CommandFactory.make(commandTable, commandMetaData)
         command.setup(context)
 
-        val disposable = command.perform().subscribe({
+        when (val result = command.perform() as Either<*, *>) {
 
-            val result = it as AbstractCommand.AbstractCommandResult<*>
-            _cycleDelegate?.onCommandPerformed(commandMetaData, result)
-
-        }, {
-            _cycleDelegate?.onError(commandMetaData, it)
-            handleError(it)
-        })
-
-        compositeDisposable.add(disposable)
+            is Either.Left -> _cycleDelegate?.onError(commandMetaData, (result.l as AbstractCommand.Failure).throwable)
+            is Either.Right -> _cycleDelegate?.onCommandPerformed(commandMetaData, result.r as AbstractCommand.Result<*>)
+        }
     }
 
     private fun handleError(throwable: Throwable) {
 
-    }
-
-    override fun clear() {
     }
 }

@@ -1,16 +1,27 @@
 package com.stevendevit.pampa
 
 import android.app.Application
-import com.google.gson.GsonBuilder
-import com.stevendevit.data.model.CommandJsonEntry
-import com.stevendevit.data.model.NumberJsonEntry
-import com.stevendevit.data.model.QuestionJsonEntry
-import com.stevendevit.data.model.SentenceJsonEntry
-import com.stevendevit.data.populate.CommandPopulateImpl
+import com.stevendevit.data.model.CommandJsonValue
+import com.stevendevit.data.model.NumberJsonValue
+import com.stevendevit.data.model.QuestionJsonValue
+import com.stevendevit.data.model.SentenceJsonValue
+import com.stevendevit.data.populate.CommandResourcePopulateImpl
+import com.stevendevit.domain.model.Music
+import com.stevendevit.music.paper.TableConstants
+import com.stevendevit.pampa.command.provider.DefaultCommandResourceProvider
+import com.stevendevit.pampa.module.KoinApp
 import com.stevendevit.pampa.module.KoinModules
+import com.stevendevit.shared.scheduler.defaultIoMain
 import io.paperdb.Paper
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.functions.Function4
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import java.util.concurrent.TimeUnit
+
 
 /**
  * Created by stevendevit on 05/01/2020.
@@ -22,9 +33,9 @@ class PampaApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Paper.init(this)
+        Paper.book().destroy()
         startKoin()
-
-        // TODO do it only for the first time
+        invalidateCache()
         populateData()
     }
 
@@ -33,58 +44,63 @@ class PampaApp : Application() {
         org.koin.core.context.startKoin {
             androidContext(this@PampaApp)
             androidLogger()
-            modules(KoinModules.AllModules)
+            modules(KoinModules.modules)
+        }
+    }
+
+    private fun invalidateCache(){
+
+        runBlocking {
+            KoinApp.AlbumDataSource.invalidateCache()
+            KoinApp.SongDataSource.invalidateCache()
+        }
+
+        GlobalScope.launch {
+
         }
     }
 
     private fun populateData() {
 
-        val gsonBuilder = GsonBuilder().create()
+        val commandResourceProvider =
+            DefaultCommandResourceProvider(this)
 
-        val commandsJsonResource = resources.openRawResource(R.raw.commands).bufferedReader().use {
-            it.readText()
-        }
+        val commands = commandResourceProvider.provideCommands()
+        val sentences = commandResourceProvider.provideSentences()
+        val questions = commandResourceProvider.provideQuestions()
+        val numbers = commandResourceProvider.provideNumbers()
 
-        val numbersJsonResource = resources.openRawResource(R.raw.numbers).bufferedReader().use {
-            it.readText()
-        }
+        Single.zip<List<CommandJsonValue>, List<SentenceJsonValue>, List<QuestionJsonValue>, List<NumberJsonValue>, Unit>(
+            commands, sentences, questions, numbers,
+            Function4 { t1, t2, t3, t4 ->
 
-        val questionsJsonResource =
-            resources.openRawResource(R.raw.questions).bufferedReader().use {
-                it.readText()
-            }
+                val dataPopulator = CommandResourcePopulateImpl()
 
-        val sentencesJsonResource =
-            resources.openRawResource(R.raw.sentences).bufferedReader().use {
-                it.readText()
-            }
+                Single.just(0).delay(0, TimeUnit.SECONDS).subscribe { it ->
 
-        val commandsJson =
-            gsonBuilder.fromJson(commandsJsonResource, CommandJsonEntry::class.java)
+                    Single.zip<Boolean, Boolean, Boolean, Boolean, Unit>(
+                        dataPopulator.populateAllDefaultCommands(t1),
+                        dataPopulator.populateAllDefaultSentences(t2),
+                        dataPopulator.populateAllQuestions(t3),
+                        dataPopulator.populateAllDefaultNumbers(t4),
+                        Function4 { r1, r2, r3, r4 ->
 
-        val numbersJson =
-            gsonBuilder.fromJson(numbersJsonResource, NumberJsonEntry::class.java)
+                            listOf(r1, r2, r3, r4).none { it == false }
 
-        val questionsJson =
-            gsonBuilder.fromJson(questionsJsonResource, QuestionJsonEntry::class.java)
+                            println("load tables")
 
-        val sentencesJson =
-            gsonBuilder.fromJson(sentencesJsonResource, SentenceJsonEntry::class.java)
+                            KoinApp.loadTables()
+                        })
+                        .defaultIoMain()
+                        .subscribe({
 
-        val dataPopulator = CommandPopulateImpl()
-        CommandPopulateImpl()
-            .populateAllDefaultCommands(commandsJson.commands!!)
-            .mergeWith(dataPopulator.populateAllDefaultNumbers(numbersJson.numbers!!))
-            .mergeWith(dataPopulator.populateAllQuestions(questionsJson.questions!!))
-            .mergeWith(dataPopulator.populateAllDefaultSentences(sentencesJson.sentences!!))
-            .subscribe {
+                        }, {
 
-             /*   val commands =
-                    Paper.book().read<List<CommandMapEntry>>(PaperConstants.TABLE_COMMANDS)
-                val questionsn =
-                    Paper.book().read<List<QuestionJsonEntry>>(PaperConstants.TABLE_QUESTIONS)
-
-                println("Succeeded tables dump")*/
-            }
+                            println()
+                        })
+                }
+            })
+            .defaultIoMain()
+            .subscribe()
     }
 }
